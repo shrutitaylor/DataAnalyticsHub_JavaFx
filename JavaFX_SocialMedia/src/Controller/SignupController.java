@@ -1,20 +1,27 @@
 package Controller;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import Dao.UserDaoImpl;
 import Model.ModelMine;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
 public class SignupController {
+	
+	@FXML
+	private Button login;
+	
 	@FXML 
 	private TextField usernameTextField;
 	@FXML 
@@ -78,6 +85,27 @@ public class SignupController {
 			invalidDetails.setTextFill(Color.RED);
 		}
 	});
+			
+			login.setOnAction(event ->{
+				try {
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml")); 
+					
+					LoginController loginController = new LoginController(stage, model);
+					loader.setController(loginController);
+									
+					GridPane root = loader.load();
+					loginController.showStage(root);
+					
+					//stage.close()	;				
+					
+			} catch (IOException | RuntimeException e) {
+				System.out.println(e.getMessage());
+				Scene scene = new Scene(new Label(e.getMessage()), 200, 100);
+				stage.setTitle("Error");
+				stage.setScene(scene);
+				stage.show();
+			}
+			});
 	
 	}
 	

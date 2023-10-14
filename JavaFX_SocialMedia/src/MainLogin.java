@@ -56,6 +56,7 @@ public class MainLogin extends Application{
 				
 				
 		} catch (IOException | SQLException | RuntimeException e) {
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 			Scene scene = new Scene(new Label(e.getMessage()), 200, 100);
 			primaryStage.setTitle("Error");

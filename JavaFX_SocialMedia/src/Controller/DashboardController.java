@@ -29,6 +29,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -53,6 +54,8 @@ public class DashboardController {
 	private MenuItem updateProfile; // // Corresponds to the Menu item "updateProfile" in HomeView.fxml
 	@FXML
 	private MenuItem myPostsPage;
+	@FXML
+	private MenuItem logout;
 	@FXML
 	private ListView<String> pageListView;
 	
@@ -355,6 +358,28 @@ public class DashboardController {
 				e.printStackTrace();
 				System.out.println(e.getMessage());
 			}
+		});
+		
+		logout.setOnAction(event -> {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml")); 
+				
+				LoginController loginController = new LoginController(stage, model);
+				loader.setController(loginController);
+								
+				GridPane root = loader.load();
+				loginController.showStage(root);
+				
+				//stage.close()	;				
+				
+		} catch (IOException | RuntimeException e) {
+			System.out.println(e.getMessage());
+			Scene scene = new Scene(new Label(e.getMessage()), 200, 100);
+			stage.setTitle("Error");
+			stage.setScene(scene);
+			stage.show();
+		}
+			
 		});
 	}
 	private Post getId(String id) {

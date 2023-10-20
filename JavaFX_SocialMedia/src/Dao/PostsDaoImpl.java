@@ -136,7 +136,9 @@ public class PostsDaoImpl implements PostsDao{
 					
 					stmt.executeUpdate();
 					
-					return p;
+					//after executing update
+		            Post pp = this.getPostById(p.getId());
+		            return pp;
 			}
 		
 	}

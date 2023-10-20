@@ -51,7 +51,7 @@ public class SignupController {
 	
 	boolean valid;
 		
-		
+	public SignupController() {}
 	  public SignupController(Stage parentStage, Model model) {
 			this.stage = new Stage();
 			this.parentStage = parentStage;

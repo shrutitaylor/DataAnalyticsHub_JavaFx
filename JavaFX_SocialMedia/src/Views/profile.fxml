@@ -26,10 +26,7 @@
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
                <graphic>
-                  <FontAwesomeIconView glyphName="UNDO" text="&lt;" wrappingWidth="8.06378173828125">
-                     <font>
-                        <Font size="27.0" />
-                     </font></FontAwesomeIconView>
+                  <FontAwesomeIconView fill="WHITE" glyphName="BACKWARD" />
                </graphic>
             </Button>
          </children>

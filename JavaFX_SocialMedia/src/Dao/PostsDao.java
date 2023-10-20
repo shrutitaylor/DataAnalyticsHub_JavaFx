@@ -19,4 +19,6 @@ public interface PostsDao {
 
 	List<Post> getAllPosts() throws SQLException;
 
+	Post updatePost(Post p) throws SQLException;
+
 }

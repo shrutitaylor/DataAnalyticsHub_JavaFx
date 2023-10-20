@@ -56,8 +56,9 @@ public class ProfileController {
 			
 				loader.setController(dashboardController);
 				VBox root = loader.load();
+				root.getStylesheets().add("styles.css");
 				dashboardController.showStage(root);
-				//stage.close();
+				stage.close();
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 					//invalidDetails.setText(e.getMessage());
@@ -73,6 +74,7 @@ public class ProfileController {
 			
 				loader.setController(updateProfileController);
 				VBox root = loader.load();
+				root.getStylesheets().add("styles.css");
 				updateProfileController.showStage(root);
 				//stage.close();
 				} catch (IOException e) {

@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao{
 		try (Connection connection = DatabaseConnection.getConnection();
 				Statement stmt = connection.createStatement();) {
 			String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (username VARCHAR(10) NOT NULL,"
-					+ "password VARCHAR(8) NOT NULL," +"firstname TEXT    NOT NULL,"+" lastname  TEXT  NOT NULL,"+ "PRIMARY KEY (username))";
+					+ "password VARCHAR(8) NOT NULL," +"firstname TEXT    NOT NULL,"+" lastname  TEXT  NOT NULL,"+"vip TEXT, "+ "PRIMARY KEY (username))";
 			stmt.executeUpdate(sql);
 		} 
 	}
@@ -56,7 +56,26 @@ public class UserDaoImpl implements UserDao{
 				if (rs.next()) {
 					// User(String firstname,String lastname, String username,String password) 
 					User user = new User(rs.getString("firstname"),rs.getString("lastname"),rs.getString("username"),rs.getString("password"));
-					
+					user.setVip(rs.getString("vip"));
+					return user;
+				}
+				return null;
+			} 
+		}
+	}
+	@Override
+	public User getvipUser(String username, String password) throws SQLException {
+		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE username = ? AND password = ?";
+		try (Connection connection = DatabaseConnection.getConnection(); 
+				PreparedStatement stmt = connection.prepareStatement(sql);) {
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					// User(String firstname,String lastname, String username,String password) 
+					User user = new User(rs.getString("firstname"),rs.getString("lastname"),rs.getString("username"),rs.getString("password"));
+					user.setVip(rs.getString("vip"));
 					return user;
 				}
 				return null;

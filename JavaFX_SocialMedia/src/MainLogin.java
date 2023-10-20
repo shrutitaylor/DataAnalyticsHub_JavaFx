@@ -50,6 +50,8 @@ public class MainLogin extends Application{
 				loader.setController(loginController);
 								
 				GridPane root = loader.load();
+				// Apply the CSS file
+		        root.getStylesheets().add("styles.css");
 				loginController.showStage(root);
 				
 							

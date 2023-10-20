@@ -19,28 +19,7 @@ public class Post{
 	private int shares;
 	private Date dateTime;
 	
-	 Button update;
-	public void update() {
-		 update.setOnAction(e -> {
-	            ObservableList<Post> post = PageController.table_info_app.getSelectionModel().getSelectedItems();
-
-	            for (Post p : post) {
-	                if (p.getUpdate() == update) {
-	                    System.out.println("id: " +p.getId());
-	                    System.out.println("name: " + p.getAuthor());
-	                    System.out.println("email: " + p.getLikes());
-	                    System.out.println("notes: " + p.getShares());
-	                }
-	            }
-	        });
-	}
-	 public Button getUpdate() {
-	        return update;
-	    }
-	
-	public void setUpdate(Button update) {
-		this.update = update;
-	}
+	 
 	public int getId() {
 		return id;
 	}
@@ -106,11 +85,12 @@ public class Post{
 				
 	}
 	
+	
 	public Post(List<String> record) {
 		
 		this.id = Integer.parseInt(record.get(0));
 		this.content = record.get(1);
-		this.author = record.get(2);
+		//this.author = record.get(2);
 		this.likes = Integer.parseInt(record.get(3));
 		this.shares = Integer.parseInt(record.get(4));
 		
@@ -122,6 +102,7 @@ public class Post{
 		}	
 		
 	}
+	
 	
 	public void printData() {
 		System.out.println("Post Id: "+this.getId()+"\n"+

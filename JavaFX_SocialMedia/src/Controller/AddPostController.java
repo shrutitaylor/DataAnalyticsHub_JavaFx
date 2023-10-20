@@ -43,6 +43,9 @@ public class AddPostController {
 	@FXML
 	private Button createPostbutton;
 	
+	@FXML
+	private Button dashboard;
+	
 	private ModelMine model;
 	private Stage stage;
 	private Stage parentStage;
@@ -114,6 +117,23 @@ public class AddPostController {
 			}
 			
 		});
+		//when clicking the back button - leads to dashboard
+				dashboard.setOnAction(event -> {
+					try {
+						FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/dashboard.fxml"));
+						DashboardController dashboardController = new DashboardController(stage, model);
+					
+						loader.setController(dashboardController);
+						VBox root = loader.load();
+						root.getStylesheets().add("styles.css");
+						dashboardController.showStage(root);
+						stage.close();
+						
+						} catch (IOException e) {
+							System.out.println(e.getMessage());
+							//invalidDetails.setText(e.getMessage());
+						}
+				});
 		
 	}
 

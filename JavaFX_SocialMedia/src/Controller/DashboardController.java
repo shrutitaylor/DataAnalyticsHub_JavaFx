@@ -1,11 +1,19 @@
 package Controller;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -14,6 +22,7 @@ import Model.ModelMine;
 import Model.Post;
 import Model.User;
 import javafx.application.Application;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +30,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -32,10 +46,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 import Dao.PostLikesComparator;
 import Dao.PostSharesComparator;
+import Exception.EmptyFileException;
 import Exception.InvalidNumberException;
 
 public class DashboardController {
@@ -57,6 +74,8 @@ public class DashboardController {
 	@FXML
 	private MenuItem logout;
 	@FXML
+	private MenuItem visualisation;
+	@FXML
 	private ListView<String> pageListView;
 	
 	@FXML
@@ -77,8 +96,14 @@ public class DashboardController {
 	private Label invalidDetails;
 	@FXML
 	private Button refreshButton;
+	@FXML
+	private Button importCsv;
 	
 	List<Post> posts;
+	private HashMap<Integer, Post> records ;
+	
+	 // Create a BooleanProperty to control menu visibility
+    SimpleBooleanProperty menuVisible = new SimpleBooleanProperty(false);
 	
 	public DashboardController(Stage parentStage, ModelMine model) {
 		this.stage = new Stage();
@@ -93,6 +118,7 @@ public class DashboardController {
 	
 	@FXML
 	public void initialize() {		
+		menuVisible = new SimpleBooleanProperty(true);
 		welcomeLabel.setText("Welcome, "+ this.currentUser.getFirstname()+" "+this.currentUser.getLastname());
 
 		 //sets the posts on the dashboard
@@ -102,7 +128,7 @@ public class DashboardController {
 		//usernames.add(currentFood);
 		pageListView.getItems().clear();
 		try {
-			postList = model.getCurrentUser().getPosts();
+			postList = model.getPostsDao().getAllPosts();
 			
 			for (Post p : postList) {
 				postString.add(p.getData());
@@ -126,6 +152,7 @@ public class DashboardController {
 			
 			loader.setController(profileController);
 			VBox root = loader.load();
+			root.getStylesheets().add("styles.css");
 			profileController.showStage(root);
 			//stage.close();
 		
@@ -148,6 +175,7 @@ public class DashboardController {
 			
 			loader.setController(updateProfileController);
 			VBox root = loader.load();
+			root.getStylesheets().add("styles.css");
 			updateProfileController.showStage(root);
 			//stage.close();
 		
@@ -163,6 +191,30 @@ public class DashboardController {
 			
 			
 		});
+		//edit the profile on click
+				visualisation.setOnAction(event -> {
+					try {
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/visualisation.fxml"));
+					VisualController visualController = new VisualController(stage, model);
+					
+					loader.setController(visualController);
+					VBox root = loader.load();
+					root.getStylesheets().add("styles.css");
+					visualController.showStage(root);
+					//stage.close();
+				
+					
+					} catch (IOException e) {
+						System.out.println(e.getMessage());
+						Scene scene = new Scene(new Label(e.getMessage()), 200, 100);
+						stage.setTitle("Error");
+						stage.setScene(scene);
+						stage.show();;
+					}
+
+					
+					
+				});
 		myPostsPage.setOnAction(event -> {
 			 try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/MyPosts.fxml"));
@@ -170,7 +222,8 @@ public class DashboardController {
 					
 					loader.setController(pageController);
 					VBox root = loader.load();
-
+					root.getStylesheets().add("styles.css");
+					
 					pageController.showStage(root);
 					stage.close();
 
@@ -194,6 +247,7 @@ public class DashboardController {
 			
 				loader.setController(addPostController);
 			VBox root = loader.load();
+			root.getStylesheets().add("styles.css");
 			addPostController.showStage(root);
 			stage.close();
 		} catch (IOException e) {
@@ -340,6 +394,8 @@ public class DashboardController {
 			
 		});
 		
+		
+		
 		refreshButton.setOnAction(event -> {
 			pageListView.getItems().clear();
 			postString.clear();
@@ -368,6 +424,7 @@ public class DashboardController {
 				loader.setController(loginController);
 								
 				GridPane root = loader.load();
+				root.getStylesheets().add("styles.css");
 				loginController.showStage(root);
 				
 				//stage.close()	;				
@@ -381,6 +438,40 @@ public class DashboardController {
 		}
 			
 		});
+		// Bind the visibility of the menu item to the BooleanProperty
+		visualisation.visibleProperty().bind(menuVisible);
+
+        // Add a listener to update menu visibility based on a variable
+        menuVisible.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                System.out.println("Menu item is visible.");
+            } else {
+                System.out.println("Menu item is hidden.");
+            }
+        });
+		
+        // importing the csv -- this method reads and adds all posts
+        importCsv.visibleProperty().bind(menuVisible);
+        importCsv.setOnAction(event -> {
+        	// Open a FileChooser window, allow me to choose an csv on my computer
+			FileChooser fileChooser = new FileChooser();
+					
+			File selectedFile = fileChooser.showOpenDialog(new Stage()); 
+	
+			try {
+				FileInputStream fileInputStream = new FileInputStream(selectedFile);
+			readFile(selectedFile);
+				
+				
+			}catch (FileNotFoundException e) {
+			invalidDetails.setText("File not found!");
+				e.printStackTrace();
+			} 
+	
+			
+        	System.out.println("read file");
+        });
+		
 	}
 	private Post getId(String id) {
 
@@ -469,4 +560,96 @@ public class DashboardController {
 		}
 		
 	}
+	
+	public void readFile(File fileName) {
+		Post p;	
+		
+		records = new HashMap<Integer, Post>();
+		List<Integer> invalidPost = new ArrayList<Integer>();
+		
+		
+		try {
+			posts = model.getPostsDao().getAllPosts();
+			
+		if (fileName.length() == 0) {
+	    	
+	    	throw new EmptyFileException();
+	    	
+	    }else {
+	    	
+	    	try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+				br.readLine();
+			    String line;
+			    while ((line = br.readLine()) != null) {
+			    String[] values = line.split(",");
+			        
+			    p = new Post(Arrays.asList(values)); // Post object
+			    p.setAuthor(this.currentUser.getUsername());
+			    try {
+			    		model.getPostsDao().createNewPost(p.getId(),p.getContent(),p.getAuthor(),p.getLikes(),p.getShares(),Arrays.asList(values).get(5));
+			    		
+			    	}catch (SQLException e) {
+			    		invalidPost.add(p.getId());
+			    	}
+			    }
+	    	}
+			 catch (NullPointerException e) {
+				showAlert(e);
+	        	System.err.println("File is null.");
+	        	//return "File is null.";
+	 		   // System.exit(1);
+	        } catch (FileNotFoundException e) {
+	        	showAlert(e);
+	        	System.err.println("File not found.");
+	        	//return "File not found.";
+	 		    //System.exit(1);
+	        } catch (IOException e) {
+	        	showAlert(e);
+	        	System.err.println("An error occurred while reading the file.");
+	        	//return "An error occurred while reading the file.";
+	        	//System.exit(1);
+			} catch (ParseException e) {
+				showAlert(e);
+	        	System.err.println("An error occurred while reading the file.");
+			}
+	    	
+	    }
+		} catch (EmptyFileException e) {
+			showAlert(e);
+			System.err.println("File is empty.");
+        	//return "File is empty.";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			showAlert(e);
+			e.printStackTrace();
+		} 
+		
+		if(!invalidPost.isEmpty()) {
+	    	Alert alert = new Alert(Alert.AlertType.ERROR);
+	        alert.setTitle("Error");
+	        
+	        alert.setHeaderText("Error adding these Posts:");
+	        alert.setContentText(invalidPost.toString());
+	        DialogPane dialogPane = alert.getDialogPane();     
+	 
+	        dialogPane.getStyleClass().add("myDialog");
+	        dialogPane.setHeader(null);
+	        alert.show();
+	    }else {
+	    	invalidDetails.setText("Posts Added!");
+	    }
+		
+	}
+	private static void showAlert(Exception e){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(e.getMessage());
+        DialogPane dialogPane = alert.getDialogPane();     
+ 
+        dialogPane.getStyleClass().add("myDialog");
+        dialogPane.setHeader(null);
+        alert.show();
+    }
+	
 }

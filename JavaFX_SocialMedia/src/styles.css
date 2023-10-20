@@ -1,0 +1,49 @@
+/* styles.css */
+
+/* Style the root container */
+.root {
+    -fx-background-color: #edf1f7; /* Set background color */
+}
+
+/* Style the scene */
+.scene {
+    font-family: 'Consolas', monaco, monospace;
+}
+
+/* Style buttons */
+.button {
+    -fx-background-color: #496786; /* Button background color */
+    -fx-text-fill: white; /* Button text color */
+    font-family: 'Consolas', monaco, monospace;
+    
+    /* -fx-pref-width: 100px; /* Button width */
+    /* -fx-pref-height: 40px; Button height */ 
+}
+
+/* Style labels */
+.label {
+   /* -fx-font-size: 18px; /* Label font size */
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Style text fields */
+.text-field {
+   /* -fx-font-size: 14px; /* Text field font size */
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Style background color of TableView */
+.table-view {
+    -fx-background-color: #e0e0e0;
+    color: rgb(14, 2, 42);
+}
+
+/* Style alternating row colors in TableView */
+.table-row-cell:odd {
+    -fx-background-color: #c3d3f9;
+}
+
+/* Style alternating row colors in TableView */
+.table-row-cell:even {
+    -fx-background-color: #ffffff;
+}

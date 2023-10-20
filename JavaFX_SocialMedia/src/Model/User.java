@@ -10,6 +10,14 @@ public class User {
 	private String username;
 	private String password;
 	
+	private String vip;
+	
+	public String getVip() {
+		return vip;
+	}
+	public void setVip(String vip) {
+		this.vip = vip;
+	}
 	private List<Post> postList = new ArrayList<>();
 	
 	public List<Post> getPosts() {

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -123,5 +125,35 @@ public class PostsDaoImpl implements PostsDao{
 			return new Post(id,  content,  author,  likes,  shares,  datetime);
 		}
 	}
+
+	@Override
+	public Post updatePost(Post p) throws SQLException {
+			LocalDateTime now = LocalDateTime.now();
+        
+        	// Format the date and time as a string
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        	String formattedDateTime = now.format(formatter);	
+			String sql = "UPDATE " + TABLE_NAME + " SET content = ? ,author = ? , likes = ?, shares = ? WHERE id = ?";
+			
+				// insert into posts values(username, password,firstname,lastname);
+				try (Connection connection = DatabaseConnection.getConnection();
+						PreparedStatement stmt = connection.prepareStatement(sql);) {
+					
+					stmt.setString(1, p.getContent());
+					stmt.setString(2, p.getAuthor());
+					stmt.setInt(3, p.getLikes());
+					stmt.setInt(4, p.getShares());
+					
+					stmt.setInt(5, p.getId());
+					
+					
+					stmt.executeUpdate();
+					
+					return p;
+			}
+		
+	}
+	
+	
 
 }

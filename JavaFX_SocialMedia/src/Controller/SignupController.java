@@ -94,6 +94,7 @@ public class SignupController {
 					loader.setController(loginController);
 									
 					GridPane root = loader.load();
+					root.getStylesheets().add("styles.css");
 					loginController.showStage(root);
 					
 					//stage.close()	;				

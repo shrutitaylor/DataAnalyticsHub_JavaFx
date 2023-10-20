@@ -65,6 +65,7 @@ public class UpdateProfileController {
 			
 				loader.setController(dashboardController);
 				VBox root = loader.load();
+				root.getStylesheets().add("styles.css");
 				dashboardController.showStage(root);
 				stage.close();
 				} catch (IOException e) {

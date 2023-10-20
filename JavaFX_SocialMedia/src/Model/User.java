@@ -10,7 +10,15 @@ public class User {
 	private String username;
 	private String password;
 	
-	private String vip;
+	private List<Post> postList = new ArrayList<>(); //Each User has a list of posts
+	private String vip; //If the user is a Vip User 
+	
+	public User(String firstname,String lastname, String username,String password) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+	}
 	
 	public String getVip() {
 		return vip;
@@ -18,7 +26,7 @@ public class User {
 	public void setVip(String vip) {
 		this.vip = vip;
 	}
-	private List<Post> postList = new ArrayList<>();
+	
 	
 	public List<Post> getPosts() {
 		return postList;
@@ -26,12 +34,7 @@ public class User {
 	public void setPosts(List<Post> postList) {
 		this.postList = postList;
 	}
-	public User(String firstname,String lastname, String username,String password) {
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.username = username;
-		this.password = password;
-	}
+	
 	public String getFirstname() {
 		return firstname;
 	}

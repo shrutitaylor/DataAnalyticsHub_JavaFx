@@ -46,15 +46,10 @@ public class PageController {
 	private Stage stage;
 	private Stage parentStage;
 	private User currentUser;
-//	@FXML
-//	private ListView<String> pageListView;
-//	
+
 	@FXML
 	private Label invalidDetails;
-	
-//	String[] food = {"pizza","sushi","ramen"};
-//	
-//	String currentFood;
+
 	// Create a TableView
 	public static TableView<Post> table_info_app;
 	public static ObservableList<Post> data_table;
@@ -69,8 +64,6 @@ public class PageController {
 	
 	@FXML
 	private Button dashboard;
-	
-	
 	
 	public PageController(Stage parentStage, Model model) {
 		this.stage = new Stage();
@@ -87,26 +80,9 @@ public class PageController {
 	@FXML
 	public void initialize() {	
 		
-//		pageListView.setFocusTraversable( false );
-//		List<Post> postList;
-//		List<String>  usernames = new ArrayList<String>();;
-//		//usernames.add(currentFood);
-//		try {
-//			postList = model.getCurrentUser().getPosts();
-//			
-//			for (Post p : postList) {
-//				usernames.add(p.getData());
-//				System.out.println(p.getAuthor()); 
-//			}
-//			
-//			pageListView.getItems().addAll(usernames);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.out.println(e.getMessage());
-//		}
-		
 		table_info_app = table_info;
 
+		//Method to initialise all the table columns
         initializeCols();
         loadData();
         
@@ -131,11 +107,9 @@ public class PageController {
     }
 	
     private void initializeCols() {
-        // Post.java => id, content, likes, shares;
-
+    	//Method to initialise all the table columns
         column_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         column_content.setCellValueFactory(new PropertyValueFactory<>("content"));
-       // column_likes.setCellValueFactory(new PropertyValueFactory<>("likes"));
         column_likes.setCellValueFactory(param -> new SimpleIntegerProperty(param.getValue().getLikes()).asObject());
         column_shares.setCellValueFactory(param -> new SimpleIntegerProperty(param.getValue().getShares()).asObject());
         col_update.setCellValueFactory(new PropertyValueFactory<>(""));
@@ -144,6 +118,7 @@ public class PageController {
     }
 
     private void editableCols() {
+    	//Method to initialise all the table columns that are editable - content, likes, shares and update button
     	   try {
     	column_content.setCellFactory(TextFieldTableCell.forTableColumn());
     	column_content.setOnEditCommit(event -> 
@@ -182,17 +157,6 @@ public class PageController {
         }
         }); 
         
-//        column_shares.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-//        column_shares.setOnEditCommit(e -> {
-//        	int num =checkValidNumber(e.getNewValue().toString());
-//        if(num!=-1) {
-//        e.getTableView().getItems().get(e.getTablePosition().getRow()).setLikes(num);
-//        	}
-//        else {
-//        	invalidDetails.setText("Input is not a valid number - Shares");
-//        }
-//        });
-        
         col_update.setCellFactory(param -> new TableCell<>() {
             final Button updateButton = new Button("Update");
 
@@ -230,7 +194,7 @@ public class PageController {
     }
 
     private void loadData() {
-    	
+    	//Method to load the data to all the table columns
         data_table = FXCollections.observableArrayList();
 
         List<Post> posts;
@@ -252,6 +216,7 @@ public class PageController {
     }
 		
     public int checkValidNumber(String givenNumber)  {	
+    	//Method to check validity of a number
 		
         try {
         	int num = Integer.parseInt(givenNumber);
@@ -316,6 +281,8 @@ public class PageController {
 	   
 	    
 	} private static void showAlert(Exception e){
+		
+		//In case of any error to pop up an alert message
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);

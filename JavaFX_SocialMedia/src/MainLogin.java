@@ -29,7 +29,8 @@ public class MainLogin extends Application{
 	public void start(Stage primaryStage) {
 		try {
 				model.setup();	
-	
+				//initially opening the Login Page
+				
 				//Load FXML file
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml")); 
 				

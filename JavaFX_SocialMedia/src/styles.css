@@ -47,3 +47,21 @@
 .table-row-cell:even {
     -fx-background-color: #ffffff;
 }
+/* .menu-button,
+.menu-item {
+    -fx-background-color: #496786; /* menuitem background color */
+   /* -fx-text-fill: menuitem; /* Button text color 
+} */
+.menu-button {
+    -fx-background-color: #496786; /* menuitem background color */
+    -fx-text-fill: white;
+}
+
+
+.menu-item:focused {
+     -fx-background-color: darkgray;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: #496786;
+}

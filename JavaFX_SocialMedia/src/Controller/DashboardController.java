@@ -134,9 +134,7 @@ public class DashboardController {
 			
 			for (Post p : postList) {
 				postString.add(p.getData());
-//				System.out.println("--"); 
-//				System.out.println(p.getAuthor()); 
-//				System.out.println(p.getId()); 
+
 			}
 			
 			pageListView.getItems().addAll(postString);
@@ -193,7 +191,7 @@ public class DashboardController {
 			
 			
 		});
-		//edit the profile on click
+		//go to visualisation page on click
 				visualisation.setOnAction(event -> {
 					try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/visualisation.fxml"));
@@ -203,8 +201,7 @@ public class DashboardController {
 					VBox root = loader.load();
 					root.getStylesheets().add("styles.css");
 					visualController.showStage(root);
-					//stage.close();
-				
+					//stage.close();				
 					
 					} catch (IOException e) {
 						System.out.println(e.getMessage());
@@ -212,11 +209,11 @@ public class DashboardController {
 						stage.setTitle("Error");
 						stage.setScene(scene);
 						stage.show();;
-					}
-
-					
+					}					
 					
 				});
+				
+		//go to my posts page on click		
 		myPostsPage.setOnAction(event -> {
 			 try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/MyPosts.fxml"));
@@ -241,7 +238,7 @@ public class DashboardController {
 			
 			
 		});
-		
+		//go to Add Post page on click
 		addPostButton.setOnAction(event -> {
 			try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/AddPost.fxml"));
@@ -262,7 +259,7 @@ public class DashboardController {
 			
 		});
 		
-		
+		//Search Post based on post ID
 		searchPostButton.setOnAction(event -> {
 			
 			if(postIdTextField.getText() != "") {
@@ -303,6 +300,7 @@ public class DashboardController {
 			
 		});
 		
+		//Sort Post based on likes
 		sortByLikesButton.setOnAction(event -> {
 			
 			try {
@@ -350,6 +348,7 @@ public class DashboardController {
 	
 		});
 		
+		//Sort Post based on Shares
 		sortBySharesButton.setOnAction(event -> {
 			
 			try {
@@ -397,7 +396,7 @@ public class DashboardController {
 		});
 		
 		
-		
+		//Refresh button that refreshes the page
 		refreshButton.setOnAction(event -> {
 			pageListView.getItems().clear();
 			postString.clear();
@@ -415,6 +414,7 @@ public class DashboardController {
 			}
 		});
 		
+		//Logs out if clicked on logout menu item
 		logout.setOnAction(event -> {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml")); 
@@ -437,20 +437,14 @@ public class DashboardController {
 		}
 			
 		});
-		// Bind the visibility of the menu item to the BooleanProperty
+		
+		// Bind the visibility of the menu item 
 		visualisation.visibleProperty().bind(menuVisible);
 
-        // Add a listener to update menu visibility based on a variable
-        menuVisible.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                System.out.println("Menu item is visible.");
-            } else {
-                System.out.println("Menu item is hidden.");
-            }
-        });
-		
-        // importing the csv -- this method reads and adds all posts
+		//Add visibility to the import Button
         importCsv.visibleProperty().bind(menuVisible);
+        
+        // importing the csv -- this method reads and adds all posts
         importCsv.setOnAction(event -> {
         	// Open a FileChooser window, allow me to choose an csv on my computer
 			FileChooser fileChooser = new FileChooser();
@@ -459,21 +453,19 @@ public class DashboardController {
 	
 			try {
 				FileInputStream fileInputStream = new FileInputStream(selectedFile);
-			readFile(selectedFile);
-				
+			readFile(selectedFile);				
 				
 			}catch (FileNotFoundException e) {
 			invalidDetails.setText("File not found!");
 				e.printStackTrace();
 			} 
-	
 			
         	System.out.println("read file");
         });
 		
 	}
 	private Post getId(String id) {
-
+		//Get valid post ID
 		int postId;
 		try {
 			 postId = Integer.parseInt(id);
@@ -508,7 +500,7 @@ public class DashboardController {
 	
 	
 	public int checkValidNumber(String givenNumber)  {	
-				
+				// Check if the given number of likes or shares is valid
         try {
         	int num = Integer.parseInt(givenNumber);
             if(num <= 0) {
@@ -533,6 +525,7 @@ public class DashboardController {
 	}
 	
 	public void readFile(File fileName) {
+		//Reading the given file and updating it to the Database
 		Post p;	
 		
 		records = new HashMap<Integer, Post>();
@@ -546,7 +539,7 @@ public class DashboardController {
 	    	throw new EmptyFileException();
 	    	
 	    }else {
-	    	
+	    	// Read file
 	    	try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 				br.readLine();
 			    String line;
@@ -556,7 +549,8 @@ public class DashboardController {
 			    p = new Post(Arrays.asList(values)); // Post object
 			    p.setAuthor(this.currentUser.getUsername()); // seting current user as the suthor to all these posts
 			    try {
-			    		model.getPostsDao().createNewPost(p.getId(),p.getContent(),p.getAuthor(),p.getLikes(),p.getShares(),Arrays.asList(values).get(5));
+			    	//Updating the Database with the new post in loop
+			    	model.getPostsDao().createNewPost(p.getId(),p.getContent(),p.getAuthor(),p.getLikes(),p.getShares(),Arrays.asList(values).get(5));
 			    		
 			    	}catch (SQLException e) {
 			    		//if the post id already is in the database
@@ -567,18 +561,15 @@ public class DashboardController {
 			 catch (NullPointerException e) {
 				showAlert(e);
 	        	System.err.println("File is null.");
-	        	//return "File is null.";
-	 		   // System.exit(1);
+	        	
 	        } catch (FileNotFoundException e) {
 	        	showAlert(e);
 	        	System.err.println("File not found.");
-	        	//return "File not found.";
-	 		    //System.exit(1);
+	        	
 	        } catch (IOException e) {
 	        	showAlert(e);
 	        	System.err.println("An error occurred while reading the file.");
-	        	//return "An error occurred while reading the file.";
-	        	//System.exit(1);
+	        	
 			} catch (ParseException e) {
 				showAlert(e);
 	        	System.err.println("An error occurred while reading the file.");
@@ -588,14 +579,14 @@ public class DashboardController {
 		} catch (EmptyFileException e) {
 			showAlert(e);
 			System.err.println("File is empty.");
-        	//return "File is empty.";
+        	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			showAlert(e);
-			e.printStackTrace();
+			//e.printStackTrace();
 		} 
 		
 		if(!invalidPost.isEmpty()) {
+			//If the post cannot be added then an alert message gets displayed
 	    	Alert alert = new Alert(Alert.AlertType.ERROR);
 	        alert.setTitle("Error");
 	        
@@ -612,6 +603,7 @@ public class DashboardController {
 		
 	}
 	private static void showAlert(Exception e){
+		//If the post cannot be searched then an alert message gets displayed
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);

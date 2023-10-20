@@ -60,6 +60,8 @@ public class SignupController {
 
 		@FXML
 		public void initialize() {
+			
+			//CLicking the button to add a new user
 			createUserbutton.setOnAction(event -> {
 		try {
 		String username = usernameTextField.getText();
@@ -85,7 +87,7 @@ public class SignupController {
 			invalidDetails.setTextFill(Color.RED);
 		}
 	});
-			
+			// leads to login page
 			login.setOnAction(event ->{
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml")); 
@@ -111,7 +113,7 @@ public class SignupController {
 	}
 	
 	public boolean checkValid(String username, String password,String firstname, String lastname) {
-				
+				//Check validity of all the fields
 		if (username.isBlank() || password.isBlank()|| firstname.isBlank()|| lastname.isBlank()) {
 			  invalidDetails.setStyle(errorMessage);
 

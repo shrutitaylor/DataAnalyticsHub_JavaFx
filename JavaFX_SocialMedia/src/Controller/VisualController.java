@@ -41,19 +41,20 @@ public class VisualController {
 	@FXML
 	public void initialize() {
 		
+		// Initialising all the pie chart data
 				int[] sharesList = getSharesList();
 				ObservableList<PieChart.Data> pieChartData =
                 FXCollections.observableArrayList(
-                        new PieChart.Data("low", sharesList[0]),
-                        new PieChart.Data("mid", sharesList[1]),
-                        new PieChart.Data("high", sharesList[2])
+                        new PieChart.Data("Range (0 - 99)", sharesList[0]),
+                        new PieChart.Data("Range (100 - 999)", sharesList[1]),
+                        new PieChart.Data("Range (1000 and more)", sharesList[2])
                        );
 
 
         pieChartData.forEach(data ->
                 data.nameProperty().bind(
                         Bindings.concat(
-                                data.getName(), " amount: ", data.pieValueProperty()
+                                data.getName(), " : ", data.pieValueProperty()
                         )
                 )
         );

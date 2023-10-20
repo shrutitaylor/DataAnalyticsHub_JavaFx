@@ -51,7 +51,6 @@ public class PostsDaoImpl implements PostsDao{
 					Post p = new Post(rs.getInt("id"),rs.getString("content"),rs.getString("author"),
 							rs.getInt("likes"),rs.getInt("shares"),rs.getString("dateTime"));
 					postList.add(p);
-					//System.out.println(p.getAuthor());		
 					
 				}
 				
@@ -67,12 +66,10 @@ public class PostsDaoImpl implements PostsDao{
 						
 			try (ResultSet rs = stmt.executeQuery()) {
 				if (rs.next()) {
-					//System.out.println(rs.getInt("id"));
 					//Post(int id, String content, String author, int likes, int shares, String datetime)
 					Post p = new Post(rs.getInt("id"),rs.getString("content"),rs.getString("author"),
 							rs.getInt("likes"),rs.getInt("shares"),rs.getString("dateTime"));
 					
-					//System.out.println(p.getAuthor());		
 					return p;
 				}
 				
@@ -85,17 +82,13 @@ public class PostsDaoImpl implements PostsDao{
 		List<Post> postList = new ArrayList<>();
 		try (Connection connection = DatabaseConnection.getConnection(); 
 				PreparedStatement stmt = connection.prepareStatement(sql);) {
-			
-						
+								
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
-					//System.out.println(rs.getInt("id"));
 					//Post(int id, String content, String author, int likes, int shares, String datetime)
 					Post p = new Post(rs.getInt("id"),rs.getString("content"),rs.getString("author"),
 							rs.getInt("likes"),rs.getInt("shares"),rs.getString("dateTime"));
-					postList.add(p);
-					//System.out.println(p.getAuthor());		
-					
+					postList.add(p);					
 				}
 				
 			} return postList;
@@ -104,10 +97,7 @@ public class PostsDaoImpl implements PostsDao{
 	
 	@Override
 	public Post createNewPost(int id, String content, String author, int likes, int shares, String datetime) throws SQLException, ParseException {
-		
-//		Date d =  new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(datetime);
-//		java.sql.Date sqlDate = new java.sql.Date(d.getTime());
-		
+
 		String sql = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ? ,?, ?)";
 		// insert into posts values(username, password,firstname,lastname);
 		try (Connection connection = DatabaseConnection.getConnection();
@@ -117,8 +107,7 @@ public class PostsDaoImpl implements PostsDao{
 			stmt.setString(3, author);
 			stmt.setInt(4, likes);
 			stmt.setInt(5, shares);
-			stmt.setString(6, datetime);
-			
+			stmt.setString(6, datetime);			
 			
 			stmt.executeUpdate();
 			
@@ -142,10 +131,8 @@ public class PostsDaoImpl implements PostsDao{
 					stmt.setString(1, p.getContent());
 					stmt.setString(2, p.getAuthor());
 					stmt.setInt(3, p.getLikes());
-					stmt.setInt(4, p.getShares());
-					
-					stmt.setInt(5, p.getId());
-					
+					stmt.setInt(4, p.getShares());					
+					stmt.setInt(5, p.getId());					
 					
 					stmt.executeUpdate();
 					

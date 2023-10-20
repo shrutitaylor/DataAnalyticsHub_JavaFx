@@ -34,8 +34,7 @@ public class UpdateProfileController {
 	
 	boolean valid;
 	@FXML 
-	private Label invalidDetails;
-	
+	private Label invalidDetails;	
 
 	protected
 	String successMessage = String.format("-fx-text-fill: GREEN;");
@@ -52,7 +51,7 @@ public class UpdateProfileController {
 	@FXML
 	public void initialize() {	
 		//set all profile data
-		//passwordTextField.setText(currentUser.getUsername());
+		
 		firstnameTextField.setText(currentUser.getFirstname());
 		lastnameTextField.setText(currentUser.getLastname());
 				
@@ -70,7 +69,7 @@ public class UpdateProfileController {
 				stage.close();
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
-//					//invalidDetails.setText(e.getMessage());
+					//invalidDetails.setText(e.getMessage());
 				}
 		});
 		
@@ -104,8 +103,6 @@ public class UpdateProfileController {
 					invalidDetails.setTextFill(Color.RED);
 				}
 			});
-		
-		
 		
 	}
 	public void showStage(Pane root) {

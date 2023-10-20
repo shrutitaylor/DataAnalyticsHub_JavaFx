@@ -36,8 +36,7 @@ public class AddPostController {
 	private TextField likesTextField;
 	@FXML
 	private TextField sharesTextField;
-//	@FXML
-//	private TextField dateTextField;
+
 	@FXML
 	private Label invalidDetails;
 	@FXML
@@ -80,7 +79,7 @@ public class AddPostController {
 						
 			int likes = this.getLikes(likesTextField.getText());
 			int shares = this.getShares(sharesTextField.getText());
-			//String datetime = this.getDateTime(dateTextField.getText());
+			
 			String datetime = formattedDateTime;
 			
 			if(id !=-1 && content != "" && likes !=-1 && shares != -1 && datetime != null && author !="") {
@@ -125,21 +124,9 @@ public class AddPostController {
 		
 	}
 
-	private String getDateTime(String date) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-         try {
-                LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-                return date;
-                    
-         } catch (DateTimeParseException e) {
-        	 invalidDetails.setText("Check Date and Time format");                    
-         }
-         return null;
-           
-	}
-
+	
 	private int getLikes(String like) {
+		//Method to check if the likes are valid
 		int likes;
 		try {
 			 likes = Integer.parseInt(like);
@@ -152,6 +139,7 @@ public class AddPostController {
 		return -1;
 	}
 	private int getShares(String share) {
+		//Method to check if the shares are valid
 		int shares;
 		try {
 			shares = Integer.parseInt(share);
@@ -165,7 +153,7 @@ public class AddPostController {
 	}
 
 	private int getId(String id) {
-
+		//Method to check ID validity
 		int postId;
 		try {
 			 postId = Integer.parseInt(id);
@@ -187,6 +175,7 @@ public class AddPostController {
 	} 
 	
 	public void callDashboard(Stage stage, Model model) {
+		//Method to call the dashboard
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/dashboard.fxml"));
 			DashboardController dashboardController = new DashboardController(stage, model);

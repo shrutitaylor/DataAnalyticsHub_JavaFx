@@ -34,8 +34,7 @@ public class LoginController {
 	@FXML 
 	private TextField usernameTextField;
 	@FXML 
-	private TextField passwordTextField;
-	
+	private TextField passwordTextField;	
 	@FXML 
 	private Label outputLabel;
 	
@@ -52,12 +51,9 @@ public class LoginController {
 	String errorMessage = String.format("-fx-text-fill: RED;");
 	String errorStyle = String.format("-fx-border-color: RED; -fx-border-width: 2; -fx-border-radius: 5;");
 	String successStyle = String.format("-fx-border-color: #A9A9A9; -fx-border-width: 2; -fx-border-radius: 5;");	
-	
-	
-	
+		
 	private Model model;
-	private Stage stage;
-	
+	private Stage stage;	
 	
 	public LoginController(Stage stage, Model model) {
 		this.stage = stage;
@@ -65,12 +61,11 @@ public class LoginController {
 	}
 	
 	@FXML
-	public void initialize() {	
-		
-		
+	public void initialize() {		
 		
 		loginButton.setOnAction(event -> {
 		User currentUser;
+		//Check validity of the entered user
 		try {
 			if (usernameTextField.getText().isBlank() || passwordTextField.getText().isBlank()) {
 				  invalidDetails.setStyle(errorMessage);
@@ -126,13 +121,12 @@ public class LoginController {
 				    model.setCurrentUser(currentUser); 
 				    //set posts of current user after login 
 				    this.setUserPosts(currentUser);
-				   // System.out.println("2");
+				   
 					try {
 						FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/dashboard.fxml"));
 						DashboardController dashboardController = new DashboardController(stage, model);
 						
-						loader.setController(dashboardController);
-						
+						loader.setController(dashboardController);						
 						VBox root = loader.load();
 						root.getStylesheets().add("styles.css");
 						dashboardController.showStage(root);
@@ -154,21 +148,7 @@ public class LoginController {
 						invalidDetails.setText(e.getMessage());
 						 e.printStackTrace();
 					}
-//				    try {
-//						FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Page.fxml"));
-//						PageController pageController = new PageController(stage, model);
-//						
-//						loader.setController(pageController);
-//						VBox root = loader.load();
-//
-//						pageController.showStage(root);
-//						stage.close();
-//
-//					}catch (IOException e) {
-//						System.out.println(e.getMessage());
-//						invalidDetails.setText(e.getMessage());
-//						 e.printStackTrace();
-//					}
+
 				  }				    
 				}
 			}
@@ -195,17 +175,12 @@ public class LoginController {
             e.printStackTrace();
         }
 		
-	
 	});
-		
-
 		
 	}
 	
 	public User authenticate(String username, String password) {
 		try {
-			//System.out.println(s.encryptPassword(passwordTextField.getText()));
-			//s.encryptPassword(passwordTextField.getText());
 			User u = model.getUserDao().getUser(username, password);		
 			if (u != null) {
 				System.out.println(u.getPassword());

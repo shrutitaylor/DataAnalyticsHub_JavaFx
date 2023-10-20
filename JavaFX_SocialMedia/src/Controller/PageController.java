@@ -7,7 +7,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 import Exception.InvalidNumberException;
-import Model.ModelMine;
+import Model.Model;
 import Model.Post;
 import Model.User;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -42,7 +42,7 @@ import javafx.util.converter.IntegerStringConverter;
 
 public class PageController {
 	
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	private Stage parentStage;
 	private User currentUser;
@@ -72,7 +72,7 @@ public class PageController {
 	
 	
 	
-	public PageController(Stage parentStage, ModelMine model) {
+	public PageController(Stage parentStage, Model model) {
 		this.stage = new Stage();
 		this.parentStage = parentStage;
 		this.model = model;

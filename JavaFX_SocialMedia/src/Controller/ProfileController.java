@@ -2,7 +2,7 @@ package Controller;
 
 import java.io.IOException;
 
-import Model.ModelMine;
+import Model.Model;
 import Model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class ProfileController {
 	
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	
 	@FXML
@@ -34,7 +34,7 @@ public class ProfileController {
 	
 	private User currentUser;
 	
-	public ProfileController(Stage stage, ModelMine model) {
+	public ProfileController(Stage stage, Model model) {
 		this.stage = stage;
 		this.model = model;
 		this.currentUser = model.getCurrentUser(); // setting current user

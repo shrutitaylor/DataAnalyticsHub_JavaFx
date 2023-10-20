@@ -5,10 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.ModelMine;
+import Model.Model;
 import Model.Post;
 import Model.User;
 import javafx.application.Application;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,11 +55,11 @@ public class LoginController {
 	
 	
 	
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	
 	
-	public LoginController(Stage stage, ModelMine model) {
+	public LoginController(Stage stage, Model model) {
 		this.stage = stage;
 		this.model = model;
 	}
@@ -137,7 +138,16 @@ public class LoginController {
 						dashboardController.showStage(root);
 						stage.close();
 						
-						showAlert();
+						//show the VIP confirm box only if the current user is not already VIP user
+						if(currentUser.getVip()==null )
+						{
+							showAlert();
+						}
+						else {
+							if(currentUser.getVip()!=null && currentUser.getVip().equals("Y")) {
+								dashboardController.menuVisible = new SimpleBooleanProperty(true);
+							}
+						}
 
 					}catch (IOException e) {
 						System.out.println(e.getMessage());
@@ -247,6 +257,7 @@ public class LoginController {
 
         yesButtonNode.setOnAction(event -> {
             dialog.close(); // Close the confirmation dialog
+            addVipUser();
             showLoginAlert(); // Show the "need to login" alert
         });
 
@@ -259,6 +270,15 @@ public class LoginController {
 
     
 }
+	private void addVipUser() {
+		model.getCurrentUser().setVip("Y");
+		try {
+			model.getUserDao().updateVIPUser(model.getCurrentUser().getVip(),model.getCurrentUser().getUsername(),model.getCurrentUser().getPassword());
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	}
 	private void showLoginAlert() {
         // Create an alert for "need to login"
         Alert loginAlert = new Alert(AlertType.INFORMATION);

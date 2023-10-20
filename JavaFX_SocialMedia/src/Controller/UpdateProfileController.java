@@ -3,7 +3,7 @@ package Controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import Model.ModelMine;
+import Model.Model;
 import Model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +28,7 @@ public class UpdateProfileController {
 	@FXML
 	private Button saveChangesButton;
 	
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	private User currentUser;
 	
@@ -44,7 +44,7 @@ public class UpdateProfileController {
 	String successStyle = String.format("-fx-border-color: #A9A9A9; -fx-border-width: 2; -fx-border-radius: 5;");	
 	String regex = "^[a-zA-Z]+$";	
 	
-	public UpdateProfileController(Stage stage, ModelMine model) {
+	public UpdateProfileController(Stage stage, Model model) {
 		this.stage = stage;
 		this.model = model;
 		this.currentUser = model.getCurrentUser(); // setting current user
@@ -116,7 +116,7 @@ public class UpdateProfileController {
 		stage.show();
 	}
 	
-	public void callProfile(Stage stage, ModelMine model) {
+	public void callProfile(Stage stage, Model model) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/profile.fxml"));
 			ProfileController profileController = new ProfileController(stage, model);

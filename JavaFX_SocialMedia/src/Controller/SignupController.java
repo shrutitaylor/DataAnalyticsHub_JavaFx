@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import Dao.UserDaoImpl;
-import Model.ModelMine;
+import Model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,14 +45,14 @@ public class SignupController {
 	UserDaoImpl userImp = new UserDaoImpl();
 	String regex = "^[a-zA-Z]+$";	
 	
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	private Stage parentStage;
 	
 	boolean valid;
 		
 		
-	  public SignupController(Stage parentStage, ModelMine model) {
+	  public SignupController(Stage parentStage, Model model) {
 			this.stage = new Stage();
 			this.parentStage = parentStage;
 			this.model = model;

@@ -20,5 +20,6 @@ public interface UserDao {
 	User createNewUser(String firstname, String lastname, String username, String password) throws SQLException;
 	User updateUser(String firstname, String lastname, String username, String password) throws SQLException ;
 	List<User> getAllUsers() throws SQLException;
-	User getvipUser(String username, String password) throws SQLException;
+	User updateVIPUser(String vip, String username, String password) throws SQLException;
+
 }

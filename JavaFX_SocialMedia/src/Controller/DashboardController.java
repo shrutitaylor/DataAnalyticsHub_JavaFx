@@ -18,7 +18,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import Model.ModelMine;
+import Model.Model;
 import Model.Post;
 import Model.User;
 import javafx.application.Application;
@@ -57,7 +57,7 @@ import Exception.InvalidNumberException;
 
 public class DashboardController {
 
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	private Stage parentStage;
 	private User currentUser;
@@ -105,7 +105,7 @@ public class DashboardController {
 	 // Create a BooleanProperty to control menu visibility
     SimpleBooleanProperty menuVisible = new SimpleBooleanProperty(false);
 	
-	public DashboardController(Stage parentStage, ModelMine model) {
+	public DashboardController(Stage parentStage, Model model) {
 		this.stage = new Stage();
 		this.parentStage = parentStage;
 		this.model = model;
@@ -118,9 +118,11 @@ public class DashboardController {
 	
 	@FXML
 	public void initialize() {		
-		menuVisible = new SimpleBooleanProperty(true);
+		
 		welcomeLabel.setText("Welcome, "+ this.currentUser.getFirstname()+" "+this.currentUser.getLastname());
-
+		if(this.currentUser.getVip()!=null && this.currentUser.getVip().equals("Y")) {
+			menuVisible = new SimpleBooleanProperty(true);
+		}
 		 //sets the posts on the dashboard
 		pageListView.setFocusTraversable( false );
 		List<Post> postList;
@@ -403,9 +405,6 @@ public class DashboardController {
 								
 				for (Post p : model.getPostsDao().getAllPosts()) {
 					postString.add(p.getData());
-//					System.out.println("--"); 
-//					System.out.println(p.getAuthor()); 
-//					System.out.println(p.getId()); 
 				}
 				
 				pageListView.getItems().addAll(postString);
@@ -508,34 +507,6 @@ public class DashboardController {
 	}
 	
 	
-		
-//	private void loadData(String firstname,String lastname, String username,String password){
-//	    data_table=FXCollections.observableArrayList();
-//
-//	    for(int x=1;x< 2;x++){
-//
-//	    /* Generates the data items in the table */
-//	    data_table.add(new User( firstname, lastname,  username, password));
-//	    }
-//
-//	    table_info.setItems(data_table);
-//	}
-
-//	@Override
-//    public ListCell<User> call(ListView<User> param) {
-//        return new ListCell<>(){
-//            @Override
-//            public void updateItem(User user, boolean empty) {
-//                super.updateItem(user, empty);
-//                if (empty || user == null) {
-//                    setText(null);
-//                } else {
-//                    setText(user.getFirstname() + " " + user.getLastname());
-//                }
-//            }
-//        };
-//    }
-	
 	public int checkValidNumber(String givenNumber)  {	
 				
         try {
@@ -571,8 +542,7 @@ public class DashboardController {
 		try {
 			posts = model.getPostsDao().getAllPosts();
 			
-		if (fileName.length() == 0) {
-	    	
+		if (fileName.length() == 0) {	    	
 	    	throw new EmptyFileException();
 	    	
 	    }else {
@@ -584,11 +554,12 @@ public class DashboardController {
 			    String[] values = line.split(",");
 			        
 			    p = new Post(Arrays.asList(values)); // Post object
-			    p.setAuthor(this.currentUser.getUsername());
+			    p.setAuthor(this.currentUser.getUsername()); // seting current user as the suthor to all these posts
 			    try {
 			    		model.getPostsDao().createNewPost(p.getId(),p.getContent(),p.getAuthor(),p.getLikes(),p.getShares(),Arrays.asList(values).get(5));
 			    		
 			    	}catch (SQLException e) {
+			    		//if the post id already is in the database
 			    		invalidPost.add(p.getId());
 			    	}
 			    }

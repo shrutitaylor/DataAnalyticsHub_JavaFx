@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import Dao.PostSharesComparator;
-import Model.ModelMine;
+import Model.Model;
 import Model.Post;
 import Model.User;
 import javafx.beans.binding.Bindings;
@@ -29,10 +29,10 @@ public class VisualController {
 	private Button dashboard;
 
 	private User currentUser;
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	
-	public VisualController(Stage stage, ModelMine model) {
+	public VisualController(Stage stage, Model model) {
 		this.stage = stage;
 		this.model = model;
 		this.currentUser = model.getCurrentUser(); // setting current user

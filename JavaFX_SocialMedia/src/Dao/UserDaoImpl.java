@@ -29,7 +29,7 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User createNewUser(String firstname, String lastname, String username, String password) throws SQLException {
-		String sql = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ?,?)";
 		// insert into users values(username, password,firstname,lastname);
 		try (Connection connection = DatabaseConnection.getConnection();
 				PreparedStatement stmt = connection.prepareStatement(sql);) {
@@ -37,10 +37,14 @@ public class UserDaoImpl implements UserDao{
 			stmt.setString(2, password);
 			stmt.setString(3, firstname);
 			stmt.setString(4, lastname);
+			stmt.setString(5, null);
 			
 
 			stmt.executeUpdate();
-			return new User(firstname, lastname,username, password);
+			User u = new User(firstname, lastname,username, password);
+			u.setVip(null);
+			
+			return u;
 		} 
 	}
 
@@ -63,25 +67,7 @@ public class UserDaoImpl implements UserDao{
 			} 
 		}
 	}
-	@Override
-	public User getvipUser(String username, String password) throws SQLException {
-		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE username = ? AND password = ?";
-		try (Connection connection = DatabaseConnection.getConnection(); 
-				PreparedStatement stmt = connection.prepareStatement(sql);) {
-			stmt.setString(1, username);
-			stmt.setString(2, password);
-			
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					// User(String firstname,String lastname, String username,String password) 
-					User user = new User(rs.getString("firstname"),rs.getString("lastname"),rs.getString("username"),rs.getString("password"));
-					user.setVip(rs.getString("vip"));
-					return user;
-				}
-				return null;
-			} 
-		}
-	}
+	
 	
 	@Override
 	public User updateUser(String firstname, String lastname, String username, String password) throws SQLException {
@@ -93,6 +79,23 @@ public class UserDaoImpl implements UserDao{
 			stmt.setString(2, lastname);
 			stmt.setString(3, password);
 			stmt.setString(4, username);
+			
+			stmt.executeUpdate();
+
+			//after executing update
+            User u = this.getUser(username, password);
+            return u;
+		}
+	}
+	@Override
+	public User updateVIPUser(String vip,String username, String password) throws SQLException {
+		
+		String sql = "UPDATE " + TABLE_NAME + " SET vip = ?  WHERE username = ? AND password = ? ";
+		try (Connection connection = DatabaseConnection.getConnection(); 
+				PreparedStatement stmt = connection.prepareStatement(sql);) {
+			stmt.setString(1, vip);
+			stmt.setString(2, password);
+			stmt.setString(3, username);
 			
 			stmt.executeUpdate();
 

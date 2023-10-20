@@ -3,9 +3,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Controller.LoginController;
-import Controller.LoginController2;
 import Controller.ProfileController;
-import Model.ModelMine;
+import Model.Model;
 import Model.Post;
 import Model.User;
 import javafx.application.Application;
@@ -19,30 +18,18 @@ import javafx.stage.Stage;
 
 public class MainLogin extends Application{
 
-	private ModelMine model;
+	private Model model;
 
 	@Override
 	public void init() {
-		model = new ModelMine();
+		model = new Model();
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 				model.setup();	
-//				User u = new User("asdf","asdf","Shruti","avi");
-//				model.setCurrentUser(u);
-//				try {
-//					List<Post> postList = model.getPostsDao().getPosts(u.getUsername());
-//					model.getCurrentUser().setPosts(postList);
-//					for( Post p:model.getCurrentUser().getPosts()) 
-//					{	System.out.println(p.getData());}
-//					
-//				} catch (SQLException e) {
-//					
-//					e.printStackTrace();
-//				}
-		
+	
 				//Load FXML file
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml")); 
 				

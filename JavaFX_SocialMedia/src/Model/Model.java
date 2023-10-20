@@ -7,14 +7,14 @@ import Dao.UserDao;
 import Dao.UserDaoImpl;
 
 
-public class ModelMine {
+public class Model {
 
 	private UserDao userDao;
 	private User currentUser; 
 	private PostsDao postsDao;
 	private PostsDaoImpl postsDaoImpl;
 	
-	public ModelMine() {
+	public Model() {
 		userDao = new UserDaoImpl();
 		postsDao = new PostsDaoImpl();
 		

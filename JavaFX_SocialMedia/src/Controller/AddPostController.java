@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
-import Model.ModelMine;
+import Model.Model;
 import Model.Post;
 import Model.User;
 import javafx.fxml.FXML;
@@ -46,12 +46,12 @@ public class AddPostController {
 	@FXML
 	private Button dashboard;
 	
-	private ModelMine model;
+	private Model model;
 	private Stage stage;
 	private Stage parentStage;
 	private User currentUser;
 
-	public AddPostController(Stage parentStage, ModelMine model) {
+	public AddPostController(Stage parentStage, Model model) {
 		this.stage = new Stage();
 		this.parentStage = parentStage;
 		this.model = model;
@@ -87,8 +87,8 @@ public class AddPostController {
 				Post p = new Post(id,  content,  author,  likes,  shares,  datetime); //post object
 				try {
 					model.getPostsDao().createNewPost(id, content, author, likes, shares, datetime);
-					System.out.println("The post has been added to the collection! ");
-					invalidDetails.setText("The post has been added to the collection!");
+					//System.out.println("The post has been added to the collection! ");
+					
 					try {
 						List<Post> postList = model.getPostsDao().getPosts(author);
 						
@@ -98,10 +98,11 @@ public class AddPostController {
 						}
 						
 						System.out.println("The post has been added to the collection! ");
+						invalidDetails.setText("The post has been added to the collection!");
 						callDashboard( stage,  model);
 						
 					} catch (SQLException e) {
-						
+						invalidDetails.setText("Post ID exists");
 						e.printStackTrace();
 					}
 					
@@ -119,20 +120,7 @@ public class AddPostController {
 		});
 		//when clicking the back button - leads to dashboard
 				dashboard.setOnAction(event -> {
-					try {
-						FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/dashboard.fxml"));
-						DashboardController dashboardController = new DashboardController(stage, model);
-					
-						loader.setController(dashboardController);
-						VBox root = loader.load();
-						root.getStylesheets().add("styles.css");
-						dashboardController.showStage(root);
-						stage.close();
-						
-						} catch (IOException e) {
-							System.out.println(e.getMessage());
-							//invalidDetails.setText(e.getMessage());
-						}
+					callDashboard( stage,  model);
 				});
 		
 	}
@@ -198,14 +186,14 @@ public class AddPostController {
 		
 	} 
 	
-	public void callDashboard(Stage stage, ModelMine model) {
+	public void callDashboard(Stage stage, Model model) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/dashboard.fxml"));
 			DashboardController dashboardController = new DashboardController(stage, model);
 			
 			loader.setController(dashboardController);
 			VBox root = loader.load();
-
+			root.getStylesheets().add("styles.css");
 			dashboardController.showStage(root);
 			stage.close();
 
